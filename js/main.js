@@ -1,20 +1,39 @@
 'use strict';
 
 var OBJECT_COUNT = 8;
-var ACCOMODATION_TYPES = ['palace', 'flat', 'house', 'bungalo'];
-var TIME = ['12:00', '13:00', '14:00'];
+var ACCOMODATION_TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungalo'
+];
+var TIME = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
+var FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
+var PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+];
 var MIN_X = 0;
 var MAX_X = 1200;
 var MIN_Y = 130;
 var MAX_Y = 630;
-var pinData = {
+
+var PinData = {
   WIDTH_PIN: 50,
   HEIGHT_PIN: 70
 };
-
-var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
-var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 // Случайный элемент массива
 var getRandomElement = function (arr) {
@@ -60,9 +79,9 @@ for (var i = 0; i < OBJECT_COUNT; i++) {
       guests: 2,
       checkin: getRandomElement(TIME),
       checkout: getRandomElement(TIME),
-      features: getRandomArray(features),
+      features: getRandomArray(FEATURES),
       description: 'Описание',
-      photos: getRandomArray(photos)
+      photos: getRandomArray(PHOTOS)
     },
     location: {
       x: tempX,
@@ -82,10 +101,12 @@ var similarElementPin = map.querySelector('.map__pins');
 var similarPinTemplate = document.querySelector('#pin')
     .content;
 
+// Отрисовка метки
 var renderAdvertisment = function (advertisment) {
   var advertismentElement = similarPinTemplate.cloneNode(true);
 
-  advertismentElement.querySelector('.map__pin').style = 'left: ' + (advertisment.location.x - pinData.WIDTH_PIN / 2) + 'px; top: ' + advertisment.location.y + 'px';
+  advertismentElement.querySelector('.map__pin').style.left = advertisment.location.x - PinData.WIDTH_PIN / 2 + 'px';
+  advertismentElement.querySelector('.map__pin').style.top = advertisment.location.y - PinData.HEIGHT_PIN + 'px';
   advertismentElement.querySelector('img').src = advertisment.author.avatar.src;
   advertismentElement.querySelector('img').alt = advertisment.offer.title;
 
