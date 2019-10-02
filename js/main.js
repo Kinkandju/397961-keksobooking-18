@@ -120,3 +120,61 @@ for (var j = 0; j < advertisments.length; j++) {
 }
 
 similarElementPin.appendChild(fragment);
+
+// -----------------------------------------------------------------------------------------------------
+// Функция генерации списка удобств
+var getFeaturesList = function (featureObject) {
+  var fragmentFeature = document.createDocumentFragment();
+  var featuresList = document.createElement('ul');
+  featuresList.className = 'popup__features';
+
+  for (var f = 0; f < featureObject.offer.features.length; f++) {
+    var featureElementList = document.createElement('li');
+    featureElementList.textContent = featureObject.offer.features[f];
+    featureElementList.className = 'popup__feature popup__feature--' + featureObject.offer.features[f];
+    fragmentFeature.appendChild(featureElementList);
+  }
+  featuresList.appendChild(fragmentFeature);
+};
+
+// Функция генерации списка изображений
+var getPhotosList = function (photoObject) {
+  var fragmentPhoto = document.createDocumentFragment();
+  var photosList = document.querySelector('.popup__photos');
+
+  for (var p = 0; p < photoObject.offer.photos.length; p++) {
+    var photoElementList = document.createElement('img');
+    photoElementList.className = 'popup__photo';
+    photoElementList.src = photoObject.author.avatar.src;
+    photoElementList.alt = photoObject.offer.title;
+    fragmentPhoto.appendChild(photoElementList);
+  }
+  photosList.innerHTML = '';
+  photosList.appendChild(fragmentPhoto);
+};
+
+// Шаблон модального окна объявления
+var similarCardTemplate = document.querySelector('#card')
+    .content
+    .querySelector('.map__card');
+
+// Отрисовка модального окна объявления
+var renderCards = function (card) {
+  var cardElement = similarCardTemplate.cloneNode(true);
+
+  cardElement.querySelector('.popup__title').textContent = card.offer.title;
+  cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
+  cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
+  cardElement.querySelector('.popup__type').textContent = card.offer.type;
+  cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + 'комнаты для ' + card.offer.rooms + ' гостей';
+  cardElement.querySelector('.popup__text--time').textContent = 'Заезд после' + card.offer.checkin + ', выезд до' + card.offer.checkout;
+  cardElement.querySelector('.popup__description').textContent = card.offer.description;
+  cardElement.querySelector('.popup__avatar').src = card.author.avatar.src;
+
+  getFeaturesList(card);
+  getPhotosList(card);
+
+  return cardElement;
+};
+
+renderCards();
