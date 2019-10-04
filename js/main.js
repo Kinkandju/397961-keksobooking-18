@@ -30,6 +30,12 @@ var MAX_X = 1200;
 var MIN_Y = 130;
 var MAX_Y = 630;
 
+var AccomodationTypes = {
+  PALACE: 'Дворец',
+  FLAT: 'Квартира',
+  HOUSE: 'Дом',
+  BUNGALO: 'Бунгало'
+};
 var PinData = {
   WIDTH_PIN: 50,
   HEIGHT_PIN: 70
@@ -45,7 +51,7 @@ var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// Массив случайных элементов
+// Массив случайных элементов в массиве
 var getRandomArray = function (array) {
   var length = getRandomInteger(1, array.length);
   var resultedArr = [];
@@ -120,3 +126,67 @@ for (var j = 0; j < advertisments.length; j++) {
 }
 
 similarElementPin.appendChild(fragment);
+
+// -----------------------------------------------------------------------------------------------------
+// Функция генерации списка удобств
+var getFeaturesList = function (featureObject) {
+  var fragmentFeature = document.createDocumentFragment();
+
+  for (var f = 0; f < featureObject.length; f++) {
+    var featureElementList = document.createElement('li');
+    featureElementList.textContent = featureObject[f];
+    featureElementList.className = 'popup__feature popup__feature--' + featureObject[f];
+    fragmentFeature.appendChild(featureElementList);
+  }
+  return fragmentFeature;
+};
+
+// Функция генерации списка изображений
+var getPhotosList = function (photoObject) {
+  var fragmentPhoto = document.createDocumentFragment();
+
+  for (var p = 0; p < photoObject.length; p++) {
+    var photoElement = document.createElement('img');
+
+    photoElement.className = 'popup__photo';
+    photoElement.src = photoObject[p];
+    photoElement.alt = 'Фото для объявления';
+    photoElement.setAttribute('width', '45');
+    photoElement.setAttribute('height', '40');
+
+    fragmentPhoto.appendChild(photoElement);
+  }
+  return fragmentPhoto;
+};
+
+// Шаблон модального окна объявления
+var similarCardTemplate = document.querySelector('#card')
+    .content
+    .querySelector('.map__card');
+
+// Переменная блока фильтрации объявлений
+var mapFiltersContainer = document.querySelector('.map__filters-container');
+
+// Отрисовка модального окна объявления
+var renderCards = function (card) {
+  var cardElement = similarCardTemplate.cloneNode(true);
+
+  cardElement.querySelector('.popup__title').textContent = card.offer.title;
+  cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
+  cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
+  cardElement.querySelector('.popup__type').textContent = AccomodationTypes[card.offer.type.toUpperCase()];
+  cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.rooms + ' гостей';
+  cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
+  cardElement.querySelector('.popup__description').textContent = card.offer.description;
+  cardElement.querySelector('.popup__avatar').src = card.author.avatar.src;
+
+  cardElement.querySelector('.popup__photos').removeChild(cardElement.querySelector('.popup__photo'));
+  cardElement.querySelector('.popup__photos').appendChild(getPhotosList(card.offer.photos));
+
+  cardElement.querySelector('.popup__features').innerHTML = '';
+  cardElement.querySelector('.popup__features').appendChild(getFeaturesList(card.offer.features));
+
+  mapFiltersContainer.insertAdjacentElement('beforebegin', cardElement);
+};
+
+renderCards(advertisments[1]);
