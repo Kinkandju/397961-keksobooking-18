@@ -30,12 +30,12 @@ var MAX_X = 1200;
 var MIN_Y = 130;
 var MAX_Y = 630;
 
-var AccomodationTypes = {
-  PALACE: 'Дворец',
-  FLAT: 'Квартира',
-  HOUSE: 'Дом',
-  BUNGALO: 'Бунгало'
-};
+// var AccomodationTypes = {
+//   PALACE: 'Дворец',
+//   FLAT: 'Квартира',
+//   HOUSE: 'Дом',
+//   BUNGALO: 'Бунгало'
+// };
 var PinData = {
   WIDTH_PIN: 50,
   HEIGHT_PIN: 70
