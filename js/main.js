@@ -245,30 +245,41 @@ mainPin.addEventListener('keydown', function (evt) {
 
 var roomNumber = adForm.querySelector('#room_number');
 var capacity = adForm.querySelector('#capacity');
+var inputCapacityOptions = capacity.querySelectorAll('option');
 
-// Добавление атрибута disabled для полей выбора комнаты
-var addDisableRoom = function () {
-  for (var m = 0; m < capacity.length; m++) {
-    capacity[m].disabled = true;
+// Удаление всех элементов (option) из кол-ва мест для гостей
+var inputRoomValidateNumber = function () {
+  inputCapacityOptions.forEach(function (element) {
+    element.remove();
+  });
+
+  // Конструкция switch заменяет собой сразу несколько if
+  // и представляет собой более наглядный способ сравнить выражение сразу с несколькими вариантами
+  switch (roomNumber.selectedIndex) {
+    case 0:
+      insertInputCapacityOptions([2]);
+      break;
+    case 1:
+      insertInputCapacityOptions([1, 2]);
+      break;
+    case 2:
+      insertInputCapacityOptions([0, 1, 2]);
+      break;
+    case 3:
+      insertInputCapacityOptions([3]);
+      break;
   }
 };
 
-// Функция перебора селекторов и удаления у них атрибута disabled
-var onRoomNumberChange = function (evt) {
-  addDisableRoom();
-
-  if (evt.target.value === '100') {
-    var choosenValue = '0';
-  } else {
-    choosenValue = evt.target.value;
-  }
-  for (var v = 0; v < capacity.length; v++) {
-    if (capacity[v].value === choosenValue) {
-      capacity[v].disabled = false;
-    } else if (capacity[v].value <= choosenValue && capacity[v].value > 0) {
-      capacity[v].disabled = false;
-    }
-  }
+// Добавление элементов (option) после их перебора в кол-во мест для гостей
+// (после последовательного сравнения всех вариантов roomNumber.selectedIndex со всеми вариантами из case)
+var insertInputCapacityOptions = function (elements) {
+  elements.forEach(function (element) {
+    capacity.appendChild(inputCapacityOptions[element]);
+  });
 };
 
-roomNumber.addEventListener('change', onRoomNumberChange);
+inputRoomValidateNumber();
+
+// Событие при выборе/изменении кол-ва комнат
+roomNumber.addEventListener('change', inputRoomValidateNumber);
