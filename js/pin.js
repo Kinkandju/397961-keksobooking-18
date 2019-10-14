@@ -34,4 +34,15 @@
     fragment.appendChild(renderPin(window.advertisments[j]));
   }
 
+  // Стандартная метка
+  var mapPins = window.map.querySelectorAll('.map__pin:not(.map__pin--main)');
+  window.mapPins = mapPins;
+
+  for (var i = 0; i < mapPins.length; i++) {
+    mapPins[i].addEventListener('click', function () {
+      mapPins[i].classList.add('map__pin--active');
+      // mapPins[i] = window.renderCards(window.advertisments[i]); ??? Хотела написать, что определенной метке соответствует определенное объявление
+    });
+  }
+
 })();
