@@ -2,33 +2,28 @@
 
 (function () {
 
-  // Карта объявлений
-  var map = document.querySelector('.map');
-  window.map = map;
+  window.data = {
+    // Случайный элемент массива
+    getRandomElement: function (arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    },
 
-  // Случайный элемент массива
-  var getRandomElement = function (arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  };
-  window.getRandomElement = getRandomElement;
+    // Случайное число в диапазоне
+    getRandomInteger: function (min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
 
-  // Случайное число в диапазоне
-  var getRandomInteger = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-  window.getRandomInteger = getRandomInteger;
+    // Массив случайных элементов в массиве
+    getRandomArray: function (array) {
+      var length = window.data.getRandomInteger(1, array.length);
+      var resultedArr = [];
 
-  // Массив случайных элементов в массиве
-  var getRandomArray = function (array) {
-    var length = getRandomInteger(1, array.length);
-    var resultedArr = [];
+      for (var j = 0; j < length; j++) {
+        resultedArr.push(window.data.getRandomElement(array));
+      }
 
-    for (var j = 0; j < length; j++) {
-      resultedArr.push(getRandomElement(array));
+      return resultedArr;
     }
-
-    return resultedArr;
   };
-  window.getRandomArray = getRandomArray;
 
 })();

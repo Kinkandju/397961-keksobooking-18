@@ -7,10 +7,6 @@
     HEIGHT_PIN: 70
   };
 
-  // Элемент куда будут вставлены метки
-  var similarElementPin = window.map.querySelector('.map__pins');
-  window.similarElementPin = similarElementPin;
-
   // Шаблон метки объявления
   var similarPinTemplate = document.querySelector('#pin')
       .content;
@@ -19,6 +15,7 @@
   var renderPin = function (advertisment) {
     var advertismentElement = similarPinTemplate.cloneNode(true);
 
+    advertismentElement.querySelector('.map__pin').style.display = 'none';
     advertismentElement.querySelector('.map__pin').style.left = advertisment.location.x - PinData.WIDTH_PIN / 2 + 'px';
     advertismentElement.querySelector('.map__pin').style.top = advertisment.location.y - PinData.HEIGHT_PIN + 'px';
     advertismentElement.querySelector('img').src = advertisment.author.avatar.src;
@@ -27,22 +24,39 @@
     return advertismentElement;
   };
 
-  // Создание объявлений, соответствующих меткам на карте (по массиву advertisments)
-  var fragment = document.createDocumentFragment();
-  window.fragment = fragment;
-  for (var j = 0; j < window.advertisments.length; j++) {
-    fragment.appendChild(renderPin(window.advertisments[j]));
-  }
+  window.pin = {
+    // Функция создания меток на карте (по длине массива advertisments)
+    renderPinList: function () {
+      // Элемент куда будут вставлены метки
+      var pinList = document.querySelector('.map__pins');
+      var fragment = document.createDocumentFragment();
 
-  // Стандартная метка
-  var mapPins = window.map.querySelectorAll('.map__pin:not(.map__pin--main)');
-  window.mapPins = mapPins;
+      for (var i = 0; i < window.advertisments.length; i++) {
+        fragment.appendChild(renderPin(window.advertisments[i]));
+      }
 
-  for (var i = 0; i < mapPins.length; i++) {
-    mapPins[i].addEventListener('click', function () {
-      mapPins[i].classList.add('map__pin--active');
-      // mapPins[i] = window.renderCards(window.advertisments[i]); ??? Хотела написать, что определенной метке соответствует определенное объявление
+      pinList.appendChild(fragment);
+    },
+
+    // Функция показа меток на карте
+    showPins: function () {
+      var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+      for (var i = 0; i < mapPins.length; i++) {
+        mapPins[i].style.display = 'block';
+      }
+    }
+  };
+
+  window.pin.renderPinList();
+
+  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+  // Открытие карточки при нажатии по метке на карте
+  mapPins.forEach(function (pin, index) {
+    pin.addEventListener('click', function () {
+      mapPins[index].classList.add('.map__pin--active');
+      window.renderCards(window.advertisments[index]);
     });
-  }
+  });
 
 })();

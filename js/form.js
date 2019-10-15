@@ -2,9 +2,8 @@
 
 (function () {
 
-  var ENTER_KEYCODE = 13;
-
   var adForm = document.querySelector('.ad-form');
+  window.adForm = adForm;
   var formFieldset = adForm.querySelectorAll('fieldset');
   var titleInput = adForm.querySelector('#title');
   var priceInput = adForm.querySelector('#price');
@@ -16,55 +15,35 @@
   var capacityInput = adForm.querySelector('#capacity');
 
   // ----Реализация сценария переключения режимов страницы----
+  window.form = {
+    // Добавление атрибута disabled для полей формы
+    addDisabledFieldset: function () {
+      for (var i = 0; i < formFieldset.length; i++) {
+        formFieldset[i].disabled = true;
+      }
+    },
 
-  // Добавление атрибута disabled для полей формы
-  var addDisabledFieldset = function () {
-    for (var i = 0; i < formFieldset.length; i++) {
-      formFieldset[i].disabled = true;
+    // Удаление атрибута disabled для полей формы
+    removeDisabledFieldset: function () {
+      for (var j = 0; j < formFieldset.length; j++) {
+        formFieldset[j].removeAttribute('disabled');
+      }
+    },
+
+    // Активация попапа
+    getPopupOpen: function () {
+      // В поле "адрес" записываются координаты главной метки
+      window.map.getAddress();
+      // Активация карты/снятие затемнения c карты
+      window.map.mapAds.classList.remove('map--faded');
+      // Снятие затемнения c формы
+      adForm.classList.remove('ad-form--disabled');
+      // Удаление атрибута disabled
+      window.form.removeDisabledFieldset();
     }
   };
-  addDisabledFieldset();
 
-  // Удаление атрибута disabled для полей формы
-  var removeDisabledFieldset = function () {
-    for (var j = 0; j < formFieldset.length; j++) {
-      formFieldset[j].removeAttribute('disabled');
-    }
-  };
-
-  // Функция выполняющая:
-  // - Активацию карты
-  // - Отрисовку пинов
-  // - Отрисовку объявлений
-  // - Удаление атрибута disabled
-  var getPopupOpen = function () {
-    // Функция переноса данных координат в поле "адрес"
-    var getAddress = function () {
-      var coordinateX = window.mainPin.offsetLeft;
-      var coordinateY = window.mainPin.offsetTop;
-      adForm.querySelector('#address').value = coordinateX + ', ' + coordinateY;
-    };
-    // В поле "адрес" записываются координаты главной метки
-    getAddress();
-
-    window.map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    window.similarElementPin.appendChild(window.fragment);
-    window.renderCards(window.advertisments[0]);
-    removeDisabledFieldset();
-  };
-
-  // Событие при нажатой кнопки мыши над главной меткой:
-  window.mainPin.addEventListener('mousedown', function () {
-    getPopupOpen();
-  });
-
-  // Событие при нажатии на Enter при фокусе над главной меткой
-  window.mainPin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      getPopupOpen();
-    }
-  });
+  window.form.addDisabledFieldset();
 
   // ----Взаимодействие с формой----
 

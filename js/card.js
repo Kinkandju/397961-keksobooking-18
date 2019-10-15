@@ -46,8 +46,8 @@
 
   // Добавление случайных объявлений в массив с помощью цикла
   for (var i = 0; i < OBJECT_COUNT; i++) {
-    var tempX = window.getRandomInteger(MIN_X, MAX_X);
-    var tempY = window.getRandomInteger(MIN_Y, MAX_Y);
+    var tempX = window.data.getRandomInteger(MIN_X, MAX_X);
+    var tempY = window.data.getRandomInteger(MIN_Y, MAX_Y);
 
     advertisments.push({
       author: {
@@ -59,14 +59,14 @@
         title: 'Заголовок объявления',
         address: tempX + ', ' + tempY,
         price: 5000,
-        type: window.getRandomElement(ACCOMODATION_TYPES),
+        type: window.data.getRandomElement(ACCOMODATION_TYPES),
         rooms: 2,
         guests: 2,
-        checkin: window.getRandomElement(TIME),
-        checkout: window.getRandomElement(TIME),
-        features: window.getRandomArray(FEATURES),
+        checkin: window.data.getRandomElement(TIME),
+        checkout: window.data.getRandomElement(TIME),
+        features: window.data.getRandomArray(FEATURES),
         description: 'Описание',
-        photos: window.getRandomArray(PHOTOS)
+        photos: window.data.getRandomArray(PHOTOS)
       },
       location: {
         x: tempX,
