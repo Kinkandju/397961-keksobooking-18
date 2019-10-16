@@ -2,6 +2,14 @@
 
 (function () {
 
+  // Минимальные цены для разных типов жилья
+  var MIN_PRICES = {
+    'bungalo': 0,
+    'flat': 1000,
+    'house': 5000,
+    'palace': 10000
+  };
+
   var adForm = document.querySelector('.ad-form');
   window.adForm = adForm;
   var formFieldset = adForm.querySelectorAll('fieldset');
@@ -102,14 +110,6 @@
     }
   });
 
-  // Минимальные цены для разных типов жилья
-  var MIN_PRICES = {
-    'bungalo': 0,
-    'flat': 1000,
-    'house': 5000,
-    'palace': 10000
-  };
-
   // Валидация формы ввода стоимости определенного типа жилья
   typeInput.addEventListener('change', function (evt) {
     var priceValue = MIN_PRICES[evt.target.value];
@@ -121,41 +121,18 @@
   // Изменение плейсхолдера для соответствия типа жилья и цены
   priceInput.placeholder = MIN_PRICES.flat;
 
-  // Все элементы option, которые находятся в #timeout
-  var inputTimeOutOptions = timeOutInput.querySelectorAll('option');
-
-  // Удаление всех элементов (option) из времени выезда
-  var inputTimeInValidateOptions = function () {
-    inputTimeOutOptions.forEach(function (element) {
-      element.remove();
-    });
-
-    // Конструкция switch заменяет собой сразу несколько if
-    // и представляет собой более наглядный способ сравнить выражение сразу с несколькими вариантами
-    switch (timeInInput.selectedIndex) {
-      case 0:
-        insertInputTimeInOptions([0]);
-        break;
-      case 1:
-        insertInputTimeInOptions([1]);
-        break;
-      case 2:
-        insertInputTimeInOptions([2]);
-        break;
-    }
-  };
-
-  // Добавление элементов (option) после их перебора во время выезда
-  // (после последовательного сравнения всех вариантов timeInInput.selectedIndex со всеми вариантами из case)
-  var insertInputTimeInOptions = function (elements) {
-    elements.forEach(function (element) {
-      timeOutInput.appendChild(inputTimeOutOptions[element]);
-    });
-  };
-
-  inputTimeInValidateOptions();
-
   // Событие при выборе/изменении времени заезда
-  timeInInput.addEventListener('change', inputTimeInValidateOptions);
+  timeInInput.addEventListener('change', function (evt) {
+    var value = evt.target.value;
+
+    timeOutInput.value = value;
+  });
+
+  // Событие при выборе/изменении времени выезда
+  timeOutInput.addEventListener('change', function (evt) {
+    var value = evt.target.value;
+
+    timeInInput.value = value;
+  });
 
 })();

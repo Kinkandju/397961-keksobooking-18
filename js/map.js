@@ -25,7 +25,6 @@
 
   // Событие при нажатой кнопки мыши над главной меткой:
   mainPin.addEventListener('mousedown', function () {
-    // window.renderCards(window.advertisments[0]);
     // Показ меток на карте
     window.pin.showPins();
     // Открытие попапа

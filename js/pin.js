@@ -40,9 +40,9 @@
 
     // Функция показа меток на карте
     showPins: function () {
-      var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-      for (var i = 0; i < mapPins.length; i++) {
-        mapPins[i].style.display = 'block';
+      var targetPin = mapPins;
+      for (var i = 0; i < targetPin.length; i++) {
+        targetPin[i].style.display = 'block';
       }
     }
   };

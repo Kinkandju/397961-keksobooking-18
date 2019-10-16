@@ -21,7 +21,6 @@
       for (var j = 0; j < length; j++) {
         resultedArr.push(window.data.getRandomElement(array));
       }
-
       return resultedArr;
     }
   };
