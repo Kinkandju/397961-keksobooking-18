@@ -23,6 +23,7 @@
   var capacityInput = adForm.querySelector('#capacity');
 
   // ----Реализация сценария переключения режимов страницы----
+
   window.form = {
     // Добавление атрибута disabled для полей формы
     addDisabledFieldset: function () {
