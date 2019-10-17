@@ -23,22 +23,36 @@
     }
   };
 
+  var isPageActive = false;
   // Событие при нажатой кнопки мыши над главной меткой:
   mainPin.addEventListener('mousedown', function () {
-    // window.renderCards(window.advertisments[0]);
     // Показ меток на карте
-    window.pin.showPins();
-    // Открытие попапа
-    window.form.getPopupOpen();
+    if (!isPageActive) {
+      // Открытие попапа
+      window.form.getPopupOpen();
+      // Отрисовка меток
+      window.pin.renderPinList();
+      // Для каждой метки своя карточка объявления
+      window.pin.createPinsListeners();
+
+      isPageActive = true;
+    }
   });
 
   // Событие при нажатии на Enter при фокусе над главной меткой
   mainPin.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       // Показ меток на карте
-      window.pin.showPins();
-      // Открытие попапа
-      window.form.getPopupOpen();
+      if (!isPageActive) {
+        // Открытие попапа
+        window.form.getPopupOpen();
+        // Отрисовка меток
+        window.pin.renderPinList();
+        // Для каждой метки своя карточка объявления
+        window.pin.createPinsListeners();
+
+        isPageActive = true;
+      }
     }
   });
 

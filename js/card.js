@@ -86,52 +86,18 @@
   // Функция закрытия модального окна при нажатии Esc
   var onKeyEsc = function (evt) {
     if (card && evt.keyCode === ESC_KEYCODE) {
-      closeCard();
+      window.card.closeCard();
     }
   };
 
   // Закрытие модального окна объявления
   var closeCard = function () {
     if (card) {
-      card.querySelector('.popup__close').removeEventListener('click', closeCard);
-      document.removeEventListener('keydown', onKeyEsc);
+      card.querySelector('.popup__close').removeEventListener('click', window.card.closeCard);
+      document.removeEventListener('keydown', window.card.onKeyEsc);
       card.remove();
     }
   };
-
-  // Отрисовка модального окна объявления
-  var renderCards = function (cardData) {
-    // Удаление предыдущего модального окна объявления
-    closeCard();
-
-    var cardElement = similarCardTemplate.cloneNode(true);
-
-    cardElement.querySelector('.popup__title').textContent = cardData.offer.title;
-    cardElement.querySelector('.popup__text--address').textContent = cardData.offer.address;
-    cardElement.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
-    cardElement.querySelector('.popup__type').textContent = AccomodationTypes[cardData.offer.type.toUpperCase()];
-    cardElement.querySelector('.popup__text--capacity').textContent = cardData.offer.rooms + ' комнаты для ' + cardData.offer.rooms + ' гостей';
-    cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
-    cardElement.querySelector('.popup__description').textContent = cardData.offer.description;
-    cardElement.querySelector('.popup__avatar').src = cardData.author.avatar.src;
-    cardElement.querySelector('.popup__photos').removeChild(cardElement.querySelector('.popup__photo'));
-    cardElement.querySelector('.popup__photos').appendChild(getPhotosList(cardData.offer.photos));
-    cardElement.querySelector('.popup__features').innerHTML = '';
-    cardElement.querySelector('.popup__features').appendChild(getFeaturesList(cardData.offer.features));
-
-    // Вставка модального окна объявления в разметку/DOM
-    document.querySelector('.map').insertBefore(cardElement, document.querySelector('.map__filters-container'));
-
-    // Перенос модального окна объявления
-    card = document.querySelector('.map__card');
-
-    // Закрытие модального окна при клике
-    cardElement.querySelector('.popup__close').addEventListener('click', closeCard);
-
-    // Закрытие модального окна при нажатии Esc
-    cardElement.querySelector('.popup__close').addEventListener('keydown', onKeyEsc);
-  };
-  window.renderCards = renderCards;
 
   // Функция генерации списка удобств
   var getFeaturesList = function (featureObject) {
@@ -162,6 +128,41 @@
       fragmentPhoto.appendChild(photoElement);
     }
     return fragmentPhoto;
+  };
+
+  window.card = {
+    // Отрисовка модального окна объявления
+    renderCards: function (cardData) {
+      // Удаление предыдущего модального окна объявления
+      closeCard();
+
+      var cardElement = similarCardTemplate.cloneNode(true);
+
+      cardElement.querySelector('.popup__title').textContent = cardData.offer.title;
+      cardElement.querySelector('.popup__text--address').textContent = cardData.offer.address;
+      cardElement.querySelector('.popup__text--price').textContent = cardData.offer.price + '₽/ночь';
+      cardElement.querySelector('.popup__type').textContent = AccomodationTypes[cardData.offer.type.toUpperCase()];
+      cardElement.querySelector('.popup__text--capacity').textContent = cardData.offer.rooms + ' комнаты для ' + cardData.offer.rooms + ' гостей';
+      cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
+      cardElement.querySelector('.popup__description').textContent = cardData.offer.description;
+      cardElement.querySelector('.popup__avatar').src = cardData.author.avatar.src;
+      cardElement.querySelector('.popup__photos').removeChild(cardElement.querySelector('.popup__photo'));
+      cardElement.querySelector('.popup__photos').appendChild(getPhotosList(cardData.offer.photos));
+      cardElement.querySelector('.popup__features').innerHTML = '';
+      cardElement.querySelector('.popup__features').appendChild(getFeaturesList(cardData.offer.features));
+
+      // Вставка модального окна объявления в разметку/DOM
+      document.querySelector('.map').insertBefore(cardElement, document.querySelector('.map__filters-container'));
+
+      // Перенос модального окна объявления
+      card = document.querySelector('.map__card');
+
+      // Закрытие модального окна при клике
+      cardElement.querySelector('.popup__close').addEventListener('click', closeCard);
+
+      // Закрытие модального окна при нажатии Esc
+      cardElement.querySelector('.popup__close').addEventListener('keydown', onKeyEsc);
+    }
   };
 
 })();

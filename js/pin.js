@@ -15,7 +15,6 @@
   var renderPin = function (advertisment) {
     var advertismentElement = similarPinTemplate.cloneNode(true);
 
-    advertismentElement.querySelector('.map__pin').style.display = 'none';
     advertismentElement.querySelector('.map__pin').style.left = advertisment.location.x - PinData.WIDTH_PIN / 2 + 'px';
     advertismentElement.querySelector('.map__pin').style.top = advertisment.location.y - PinData.HEIGHT_PIN + 'px';
     advertismentElement.querySelector('img').src = advertisment.author.avatar.src;
@@ -38,25 +37,18 @@
       pinList.appendChild(fragment);
     },
 
-    // Функция показа меток на карте
-    showPins: function () {
+    // Функция открытия карточки при нажатии по метке на карте
+    createPinsListeners: function () {
       var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-      for (var i = 0; i < mapPins.length; i++) {
-        mapPins[i].style.display = 'block';
-      }
+
+      // Открытие карточки при нажатии по метке на карте
+      mapPins.forEach(function (pin, index) {
+        pin.addEventListener('click', function () {
+          mapPins[index].classList.add('.map__pin--active');
+          window.card.renderCards(window.advertisments[index]);
+        });
+      });
     }
   };
-
-  window.pin.renderPinList();
-
-  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-  // Открытие карточки при нажатии по метке на карте
-  mapPins.forEach(function (pin, index) {
-    pin.addEventListener('click', function () {
-      mapPins[index].classList.add('.map__pin--active');
-      window.renderCards(window.advertisments[index]);
-    });
-  });
 
 })();
