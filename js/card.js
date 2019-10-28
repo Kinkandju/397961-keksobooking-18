@@ -28,6 +28,7 @@
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
+  // Ограничения области блока карты
   var MIN_X = 0;
   var MAX_X = 1200;
   var MIN_Y = 130;

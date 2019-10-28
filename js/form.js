@@ -41,8 +41,6 @@
 
     // Активация попапа
     getPopupOpen: function () {
-      // В поле "адрес" записываются координаты главной метки
-      window.map.getAddress();
       // Активация карты/снятие затемнения c карты
       window.map.mapAds.classList.remove('map--faded');
       // Снятие затемнения c формы
@@ -53,6 +51,9 @@
   };
 
   window.form.addDisabledFieldset();
+
+  // В поле "адрес" записываются координаты главной метки (неактивное состояние)
+  window.map.getAddress();
 
   // ----Взаимодействие с формой----
 
