@@ -8,7 +8,8 @@
 
   var MainPinData = {
     HALF_WIDTH_PIN: 31, // Изображение метки 62px / 2
-    HEIGHT_PIN: 84 // Изображения метки 62px + хростик метки 22px
+    HEIGHT_PIN: 62,
+    ALL_HEIGHT_PIN: 84 // Изображения метки 62px + хростик метки 22px
     // MainPinData.HALF_WIDTH_PIN
   };
 
@@ -18,65 +19,33 @@
   var MIN_COORD_Y = 130;
   var MAX_COORD_Y = 630;
 
+  var isPageActive = false;
+
   window.map = {
     // Карта объявлений
     mapAds: document.querySelector('.map'),
 
     // Функция переноса данных координат в поле "адрес"
     getAddress: function () {
-      var coords = {
-        // В неактивном состоянии координаты главной метки соответствуют её центру
-        x: mainPin.offsetLeft + MainPinData.HALF_WIDTH_PIN,
-        y: mainPin.offsetTop + MainPinData.HALF_WIDTH_PIN
-      };
-
-      window.adForm.querySelector('#address').value = coords.x + ', ' + coords.y;
-    },
-
-    getNewAddress: function () {
-      var newCoords = {
-        // В активном состоянии координаты главной метки соответствуют её острому концу
-        x: window.map.coordinates.x + MainPinData.HALF_WIDTH_PIN,
-        y: window.map.coordinates.y + MainPinData.HEIGHT_PIN
-      };
-      window.adForm.querySelector('#address').value = newCoords.x + ', ' + newCoords.y;
+      if (!isPageActive) {
+        var coords = {
+          x: mainPin.offsetLeft + MainPinData.HALF_WIDTH_PIN,
+          y: mainPin.offsetTop + MainPinData.HEIGHT_PIN
+        };
+        window.adForm.querySelector('#address').value = coords.x + ', ' + coords.y;
+      } else {
+        var newCoords = {
+          x: window.map.coordinates.x + MainPinData.HALF_WIDTH_PIN,
+          y: window.map.coordinates.y + MainPinData.ALL_HEIGHT_PIN
+        };
+        window.adForm.querySelector('#address').value = newCoords.x + ', ' + newCoords.y;
+      }
     }
   };
 
-  var isPageActive = false;
-  // Событие при клике мыши на главную меткой:
-  mainPin.addEventListener('click', function () {
-    // Показ меток на карте
-    if (!isPageActive) {
-      // Открытие попапа
-      window.form.getPopupOpen();
-      // Отрисовка меток
-      window.pin.renderPinList();
-      // Для каждой метки своя карточка объявления
-      window.pin.createPinsListeners();
-
-      isPageActive = true;
-    }
-  });
-
-  // Событие при нажатии на Enter при фокусе над главной меткой
-  mainPin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      // Показ меток на карте
-      if (!isPageActive) {
-        // Открытие попапа
-        window.form.getPopupOpen();
-        // Отрисовка меток
-        window.pin.renderPinList();
-        // Для каждой метки своя карточка объявления
-        window.pin.createPinsListeners();
-
-        isPageActive = true;
-      }
-    }
-  });
-
   // ----Перетаскивание главной метки на карте----
+
+  // Событие при нажатой кнопки мыши по главной метке:
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -120,15 +89,44 @@
       mainPin.style.left = coordinates.x + 'px';
       mainPin.style.top = coordinates.y + 'px';
 
-      window.map.getNewAddress();
+      window.map.getAddress();
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
+      // Показ меток на карте
+      if (!isPageActive) {
+        // Открытие попапа
+        window.form.getPopupOpen();
+        // Отрисовка меток
+        window.pin.renderPinList();
+        // Для каждой метки своя карточка объявления
+        window.pin.createPinsListeners();
+
+        isPageActive = true;
+      }
+
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
+
+    // Событие при нажатии на Enter при фокусе над главной меткой
+    mainPin.addEventListener('keydown', function (evtKey) {
+      if (evtKey.keyCode === ENTER_KEYCODE) {
+        // Показ меток на карте
+        if (!isPageActive) {
+          // Открытие попапа
+          window.form.getPopupOpen();
+          // Отрисовка меток
+          window.pin.renderPinList();
+          // Для каждой метки своя карточка объявления
+          window.pin.createPinsListeners();
+
+          isPageActive = true;
+        }
+      }
+    });
 
     // Обработчики события передвижения мыши и отпускания кнопки мыши
     document.addEventListener('mousemove', onMouseMove);
