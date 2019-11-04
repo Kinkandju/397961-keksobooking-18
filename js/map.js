@@ -10,7 +10,6 @@
     HALF_WIDTH_PIN: 31, // Изображение метки 62px / 2
     HEIGHT_PIN: 62,
     ALL_HEIGHT_PIN: 84 // Изображения метки 62px + хростик метки 22px
-    // MainPinData.HALF_WIDTH_PIN
   };
 
   // При ограничении перемещения метки по горизонтали её острый конец должен указывать на крайнюю точку блока
@@ -32,7 +31,7 @@
           x: mainPin.offsetLeft + MainPinData.HALF_WIDTH_PIN,
           y: mainPin.offsetTop + MainPinData.HEIGHT_PIN
         };
-        window.adForm.querySelector('#address').value = coords.x + ', ' + coords.y;
+        window.form.adForm.querySelector('#address').value = coords.x + ', ' + coords.y;
       } else {
         var newCoords = {
           x: window.map.coordinates.x + MainPinData.HALF_WIDTH_PIN,

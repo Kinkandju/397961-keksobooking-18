@@ -50,7 +50,7 @@
     var tempX = window.data.getRandomInteger(MIN_X, MAX_X);
     var tempY = window.data.getRandomInteger(MIN_Y, MAX_Y);
 
-    advertisments.push({
+    window.advertisments.push({
       author: {
         avatar: {
           src: 'img/avatars/user0' + (i + 1) + '.png'
@@ -146,7 +146,7 @@
       cardElement.querySelector('.popup__text--capacity').textContent = cardData.offer.rooms + ' комнаты для ' + cardData.offer.rooms + ' гостей';
       cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
       cardElement.querySelector('.popup__description').textContent = cardData.offer.description;
-      cardElement.querySelector('.popup__avatar').src = cardData.author.avatar.src;
+      cardElement.querySelector('.popup__avatar').src = cardData.author.avatar;
       cardElement.querySelector('.popup__photos').removeChild(cardElement.querySelector('.popup__photo'));
       cardElement.querySelector('.popup__photos').appendChild(getPhotosList(cardData.offer.photos));
       cardElement.querySelector('.popup__features').innerHTML = '';

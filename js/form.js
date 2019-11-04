@@ -10,21 +10,14 @@
     'palace': 10000
   };
 
-  var adForm = document.querySelector('.ad-form');
-  window.adForm = adForm;
-  var formFieldset = adForm.querySelectorAll('fieldset');
-  var titleInput = adForm.querySelector('#title');
-  var priceInput = adForm.querySelector('#price');
-  var typeInput = adForm.querySelector('#type');
-  // var addressInput = adForm.querySelector('#address');
-  var timeInInput = adForm.querySelector('#timein');
-  var timeOutInput = adForm.querySelector('#timeout');
-  var roomNumberInput = adForm.querySelector('#room_number');
-  var capacityInput = adForm.querySelector('#capacity');
+  // var adForm = document.querySelector('.ad-form');
+  // window.adForm = adForm;
 
   // ----Реализация сценария переключения режимов страницы----
 
   window.form = {
+    adForm: document.querySelector('.ad-form'),
+
     // Добавление атрибута disabled для полей формы
     addDisabledFieldset: function () {
       for (var i = 0; i < formFieldset.length; i++) {
@@ -44,11 +37,20 @@
       // Активация карты/снятие затемнения c карты
       window.map.mapAds.classList.remove('map--faded');
       // Снятие затемнения c формы
-      adForm.classList.remove('ad-form--disabled');
+      window.form.adForm.classList.remove('ad-form--disabled');
       // Удаление атрибута disabled
       window.form.removeDisabledFieldset();
     }
   };
+
+  var formFieldset = window.form.adForm.querySelectorAll('fieldset');
+  var titleInput = window.form.adForm.querySelector('#title');
+  var priceInput = window.form.adForm.querySelector('#price');
+  var typeInput = window.form.adForm.querySelector('#type');
+  var timeInInput = window.form.adForm.querySelector('#timein');
+  var timeOutInput = window.form.adForm.querySelector('#timeout');
+  var roomNumberInput = window.form.adForm.querySelector('#room_number');
+  var capacityInput = window.form.adForm.querySelector('#capacity');
 
   window.form.addDisabledFieldset();
 
@@ -136,5 +138,38 @@
 
     timeInInput.value = value;
   });
+
+  // ----Отправка формы----
+
+  var formSend = function () {
+    window.map.mapAds.classList.add('hidden');
+    // window.setup.popup.classList.add('hidden');
+  };
+
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  var showError = function (errorMessage) {
+    errorHandler(errorMessage);
+  };
+
+  var onFormSubmit = function (evt) {
+    evt.preventDefault();
+
+    window.backend.save(new FormData(window.form.adForm), formSend, showError);
+  };
+
+  window.form.adForm.addEventListener('submit', onFormSubmit);
 
 })();

@@ -43,9 +43,11 @@
 
       // Открытие карточки при нажатии по метке на карте
       mapPins.forEach(function (pin, index) {
-        pin.addEventListener('click', function () {
-          mapPins[index].classList.add('.map__pin--active');
-          window.card.renderCards(window.advertisments[index]);
+        window.backend.load(function (advertisments) {
+          pin.addEventListener('click', function () {
+            mapPins[index].classList.add('.map__pin--active');
+            window.card.renderCards(advertisments[index]);
+          });
         });
       });
     }
