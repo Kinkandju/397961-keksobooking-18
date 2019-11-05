@@ -37,24 +37,22 @@
           fragment.appendChild(renderPin(pin));
         });
         pinList.appendChild(fragment);
-        window.pin.createPinsListeners();
+
+        // Функция открытия карточки при нажатии по метке на карте
+        var createPinsListeners = function () {
+          var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+          mapPins.forEach(function (pin, index) {
+            pin.addEventListener('click', function () {
+              mapPins[index].classList.add('.map__pin--active');
+              window.card.renderCards(advertisments[index]);
+            });
+          });
+        };
+
+        createPinsListeners();
       };
       window.backend.load(onLoad);
-    },
-
-    // Функция открытия карточки при нажатии по метке на карте
-    createPinsListeners: function () {
-      var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-      // Открытие карточки при нажатии по метке на карте
-      mapPins.forEach(function (pin, index) {
-        window.backend.load(function (advertisments) {
-          pin.addEventListener('click', function () {
-            mapPins[index].classList.add('.map__pin--active');
-            window.card.renderCards(advertisments[index]);
-          });
-        });
-      });
     }
   };
 

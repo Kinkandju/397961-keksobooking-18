@@ -100,8 +100,6 @@
         window.form.getPopupOpen();
         // Отрисовка меток
         window.pin.renderPinList();
-        // Для каждой метки своя карточка объявления
-        window.pin.createPinsListeners();
 
         isPageActive = true;
       }
@@ -119,8 +117,6 @@
           window.form.getPopupOpen();
           // Отрисовка меток
           window.pin.renderPinList();
-          // Для каждой метки своя карточка объявления
-          window.pin.createPinsListeners();
 
           isPageActive = true;
         }
