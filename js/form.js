@@ -146,21 +146,20 @@
   };
 
   var errorHandler = function (errorMessage) {
-    // var similarErrorTemplate = document.querySelector('#error')
-    // .content;
-    // .querySelector('.error_card');
+    var similarErrorTemplate = document.querySelector('#error')
+    .content;
 
-    // var node = similarErrorTemplate.cloneNode(true);
-    var node = document.createElement('div');
+    var node = similarErrorTemplate.cloneNode(true);
+    // var node = document.createElement('div');
+    //
+    //
+    // node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white';
+    // node.style.position = 'absolute';
+    // node.style.left = 0;
+    // node.style.right = 0;
+    // node.style.fontSize = '30px';
 
-
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-
-    node.textContent = errorMessage;
+    node.querySelector('.error__message').textContent = errorMessage;
 
     document.body.insertAdjacentElement('afterbegin', node);
   };
