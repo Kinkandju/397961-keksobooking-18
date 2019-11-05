@@ -143,11 +143,16 @@
 
   var formSend = function () {
     window.map.mapAds.classList.add('hidden');
-    // window.setup.popup.classList.add('hidden');
   };
 
   var errorHandler = function (errorMessage) {
+    // var similarErrorTemplate = document.querySelector('#error')
+    // .content;
+    // .querySelector('.error_card');
+
+    // var node = similarErrorTemplate.cloneNode(true);
     var node = document.createElement('div');
+
 
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white';
     node.style.position = 'absolute';

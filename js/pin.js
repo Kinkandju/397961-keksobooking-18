@@ -21,11 +21,22 @@
     advertismentElement.querySelector('img').alt = advertisment.offer.title;
 
     return advertismentElement;
+
+  };
+
+  // Функция открытия карточки при нажатии по метке на карте
+  var createPinsListeners = function (advertisments) {
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    mapPins.forEach(function (pin, index) {
+      pin.addEventListener('click', function () {
+        mapPins[index].classList.add('.map__pin--active');
+        window.card.renderCards(advertisments[index]);
+      });
+    });
   };
 
   window.pin = {
-    // pinList: document.querySelector('.map__pins'),
-
     // Функция создания меток на карте (по длине массива advertisments)
     renderPinList: function () {
       // Элемент куда будут вставлены метки
@@ -38,19 +49,7 @@
         });
         pinList.appendChild(fragment);
 
-        // Функция открытия карточки при нажатии по метке на карте
-        var createPinsListeners = function () {
-          var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-          mapPins.forEach(function (pin, index) {
-            pin.addEventListener('click', function () {
-              mapPins[index].classList.add('.map__pin--active');
-              window.card.renderCards(advertisments[index]);
-            });
-          });
-        };
-
-        createPinsListeners();
+        createPinsListeners(advertisments);
       };
       window.backend.load(onLoad);
     }
