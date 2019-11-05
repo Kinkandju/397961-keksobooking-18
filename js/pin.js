@@ -17,24 +17,29 @@
 
     advertismentElement.querySelector('.map__pin').style.left = advertisment.location.x - PinData.WIDTH_PIN / 2 + 'px';
     advertismentElement.querySelector('.map__pin').style.top = advertisment.location.y - PinData.HEIGHT_PIN + 'px';
-    advertismentElement.querySelector('img').src = advertisment.author.avatar.src;
+    advertismentElement.querySelector('img').src = advertisment.author.avatar;
     advertismentElement.querySelector('img').alt = advertisment.offer.title;
 
     return advertismentElement;
   };
 
   window.pin = {
+    // pinList: document.querySelector('.map__pins'),
+
     // Функция создания меток на карте (по длине массива advertisments)
     renderPinList: function () {
       // Элемент куда будут вставлены метки
       var pinList = document.querySelector('.map__pins');
       var fragment = document.createDocumentFragment();
 
-      for (var i = 0; i < window.advertisments.length; i++) {
-        fragment.appendChild(renderPin(window.advertisments[i]));
-      }
-
-      pinList.appendChild(fragment);
+      var onLoad = function (advertisments) {
+        advertisments.forEach(function (pin) {
+          fragment.appendChild(renderPin(pin));
+        });
+        pinList.appendChild(fragment);
+        window.pin.createPinsListeners();
+      };
+      window.backend.load(onLoad);
     },
 
     // Функция открытия карточки при нажатии по метке на карте

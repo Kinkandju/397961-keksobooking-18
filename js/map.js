@@ -37,7 +37,7 @@
           x: window.map.coordinates.x + MainPinData.HALF_WIDTH_PIN,
           y: window.map.coordinates.y + MainPinData.ALL_HEIGHT_PIN
         };
-        window.adForm.querySelector('#address').value = newCoords.x + ', ' + newCoords.y;
+        window.form.adForm.querySelector('#address').value = newCoords.x + ', ' + newCoords.y;
       }
     }
   };
