@@ -4,7 +4,7 @@
 
   var Url = {
     DOWNLOAD: 'https://js.dump.academy/keksobooking/data',
-    UPLOAD: 'https://js.dump.academy/keksobooking1'
+    UPLOAD: 'https://js.dump.academy/keksobooking'
   };
 
   var CODE_SUCCESS = 200;
