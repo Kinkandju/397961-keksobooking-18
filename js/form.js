@@ -218,6 +218,8 @@
       successHandler(successMessage);
     };
 
+    showSuccess();
+
     window.backend.save(new FormData(window.form.adForm), formSend, showError);
 
   };
