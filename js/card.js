@@ -3,6 +3,7 @@
 (function () {
 
   var ESC_KEYCODE = 27;
+  window.card.ESC_KEYCODE = ESC_KEYCODE;
   var AccomodationTypes = {
     PALACE: 'Дворец',
     FLAT: 'Квартира',

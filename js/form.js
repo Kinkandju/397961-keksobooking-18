@@ -150,11 +150,50 @@
     .content
     .querySelector('.error');
 
-    var node = similarErrorTemplate.cloneNode(true);
+    var nodeError = similarErrorTemplate.cloneNode(true);
+    nodeError.querySelector('.error__message').textContent = errorMessage;
 
-    node.querySelector('.error__message').textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', nodeError);
 
-    document.body.insertAdjacentElement('afterbegin', node);
+    // Кнопка закрытия окна об ошибке
+    var errorButton = document.querySelector('.error__button');
+
+    // Событие клика на кнопку закрытия
+    errorButton.addEventListener('click', function () {
+      // closePopup();
+      nodeError.classList.add('hidden');
+      similarErrorTemplate.style = '';
+    });
+
+    // Событие клика на на произвольную область экрана
+    nodeError.addEventListener('click', function () {
+      // closePopup();
+      nodeError.classList.add('hidden');
+      similarErrorTemplate.style = '';
+    });
+
+    // Событие нажатия клавиши Esc на произвольную область экрана
+    nodeError.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.card.ESC_KEYCODE) {
+        // closePopup();
+        nodeError.classList.add('hidden');
+        similarErrorTemplate.style = '';
+      }
+    });
+
+    // Функция удаления обработчика закрытия попапа по нажатию на Esc
+    // var onPopupEscPress = function (evt) {
+    //   if (evt.keyCode === window.card.ESC_KEYCODE) {
+    //     closePopup();
+    //   }
+    // };
+
+    // Функция закрытия попапа
+    // var closePopup = function () {
+    //   nodeError.classList.add('hidden');
+    //   document.removeEventListener('keydown', onPopupEscPress);
+    // };
+
   };
 
   var showError = function (errorMessage) {
@@ -164,7 +203,23 @@
   var onFormSubmit = function (evt) {
     evt.preventDefault();
 
+    var successHandler = function (successMessage) {
+      var similarSuccessTemplate = document.querySelector('#success')
+      .content
+      .querySelector('.success');
+
+      var nodeSuccess = similarSuccessTemplate.cloneNode(true);
+      nodeSuccess.querySelector('.success__message').textContent = successMessage;
+
+      document.body.insertAdjacentElement('afterbegin', nodeSuccess);
+    };
+
+    var showSuccess = function (successMessage) {
+      successHandler(successMessage);
+    };
+
     window.backend.save(new FormData(window.form.adForm), formSend, showError);
+
   };
 
   window.form.adForm.addEventListener('submit', onFormSubmit);

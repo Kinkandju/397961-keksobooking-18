@@ -17,8 +17,7 @@
       if (xhr.status === CODE_SUCCESS) {
         onLoad(xhr.response);
       } else {
-        // onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-        onError('Ошибка загрузки объявления');
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
