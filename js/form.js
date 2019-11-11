@@ -43,7 +43,7 @@
   };
 
   var formFieldset = window.form.adForm.querySelectorAll('fieldset');
-  var featuresFieldset = window.form.adForm.querySelectorAll('.feature__checkbox')
+  var featuresFieldset = window.form.adForm.querySelectorAll('.feature__checkbox');
   var titleInput = window.form.adForm.querySelector('#title');
   var priceInput = window.form.adForm.querySelector('#price');
   var typeInput = window.form.adForm.querySelector('#type');
