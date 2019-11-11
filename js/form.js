@@ -10,8 +10,9 @@
     'palace': 10000
   };
 
-  // var adForm = document.querySelector('.ad-form');
-  // window.adForm = adForm;
+  var MAX_PRICE = 1000000;
+
+  var ESC_KEYCODE = 27;
 
   // ----Реализация сценария переключения режимов страницы----
 
@@ -102,15 +103,41 @@
   // ----Валидация полей формы----
 
   // Валидация формы ввода заголовка объявления
+  titleInput.addEventListener('input', function () {
+    titleInput.checkValidity();
+  });
+
   titleInput.addEventListener('invalid', function () {
     if (titleInput.validity.tooShort) {
       titleInput.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
+      titleInput.style.border = '2px solid tomato';
     } else if (titleInput.validity.tooLong) {
       titleInput.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
+      titleInput.style.border = '2px solid tomato';
     } else if (titleInput.validity.valueMissing) {
       titleInput.setCustomValidity('Обязательное поле');
+      titleInput.style.border = '2px solid tomato';
     } else {
       titleInput.setCustomValidity('');
+      titleInput.style.border = 'none';
+    }
+  });
+
+  // Валидация формы ввода цены за ночь
+  priceInput.addEventListener('change', function () {
+    priceInput.checkValidity();
+  });
+
+  priceInput.addEventListener('invalid', function () {
+    if (priceInput.validity.rangeOverflow) {
+      priceInput.setCustomValidity('Максимальное значение — ' + MAX_PRICE);
+      priceInput.style.border = '2px solid tomato';
+    } else if (priceInput.validity.valueMissing) {
+      priceInput.setCustomValidity('Это обязательное поле');
+      priceInput.style.border = '2px solid tomato';
+    } else {
+      priceInput.setCustomValidity('');
+      priceInput.style.border = 'none';
     }
   });
 
@@ -143,6 +170,50 @@
 
   var formSend = function () {
     window.map.mapAds.classList.add('hidden');
+
+    var successHandler = function (successMessage) {
+      var similarSuccessTemplate = document.querySelector('#success')
+      .content
+      .querySelector('.success');
+
+      var nodeSuccess = similarSuccessTemplate.cloneNode(true);
+      nodeSuccess.querySelector('.success__message').textContent = successMessage;
+
+      document.body.insertAdjacentElement('afterbegin', nodeSuccess);
+
+      // Событие клика на на произвольную область экрана
+      nodeSuccess.addEventListener('click', function () {
+        closePopup();
+        similarSuccessTemplate.style = '';
+      });
+
+      // Событие нажатия клавиши Esc на произвольную область экрана
+      nodeSuccess.addEventListener('keydown', function (evtKey) {
+        if (evtKey.keyCode === ESC_KEYCODE) {
+          closePopup();
+          similarSuccessTemplate.style = '';
+        }
+      });
+
+      // Функция удаления обработчика закрытия попапа по нажатию на Esc
+      var onPopupEscPress = function (evt) {
+        if (evt.keyCode === ESC_KEYCODE) {
+          closePopup();
+        }
+      };
+
+      // Функция закрытия попапа
+      var closePopup = function () {
+        nodeSuccess.classList.add('hidden');
+        document.removeEventListener('keydown', onPopupEscPress);
+      };
+    };
+
+    var showSuccess = function (successMessage) {
+      successHandler(successMessage);
+    };
+
+    showSuccess();
   };
 
   var errorHandler = function (errorMessage) {
@@ -160,65 +231,65 @@
 
     // Событие клика на кнопку закрытия
     errorButton.addEventListener('click', function () {
-      // closePopup();
-      nodeError.classList.add('hidden');
+      closePopup();
       similarErrorTemplate.style = '';
     });
 
     // Событие клика на на произвольную область экрана
     nodeError.addEventListener('click', function () {
-      // closePopup();
-      nodeError.classList.add('hidden');
+      closePopup();
       similarErrorTemplate.style = '';
     });
 
     // Событие нажатия клавиши Esc на произвольную область экрана
-    nodeError.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.card.ESC_KEYCODE) {
-        // closePopup();
-        nodeError.classList.add('hidden');
+    nodeError.addEventListener('keydown', function (evtKey) {
+      if (evtKey.keyCode === ESC_KEYCODE) {
+        closePopup();
         similarErrorTemplate.style = '';
       }
     });
 
     // Функция удаления обработчика закрытия попапа по нажатию на Esc
-    // var onPopupEscPress = function (evt) {
-    //   if (evt.keyCode === window.card.ESC_KEYCODE) {
-    //     closePopup();
-    //   }
-    // };
+    var onPopupEscPress = function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        closePopup();
+      }
+    };
 
     // Функция закрытия попапа
-    // var closePopup = function () {
-    //   nodeError.classList.add('hidden');
-    //   document.removeEventListener('keydown', onPopupEscPress);
-    // };
-
+    var closePopup = function () {
+      nodeError.classList.add('hidden');
+      document.removeEventListener('keydown', onPopupEscPress);
+    };
   };
 
+  // Показ сообщения об ошибке
   var showError = function (errorMessage) {
     errorHandler(errorMessage);
   };
 
+  // Активное и неактивное состояния страницы
+  // var pageStatus = function () {
+  //   if (!window.map.isPageActive) {
+  //     // Открытие попапа
+  //     window.form.getPopupOpen();
+  //     // Отрисовка меток
+  //     window.pin.renderPinList();
+  //
+  //     window.map.isPageActive = true;
+  //   } else {
+  //   // Активация карты/снятие затемнения c карты
+  //     window.map.mapAds.classList.add('map--faded');
+  //     // Снятие затемнения c формы
+  //     window.form.adForm.classList.add('ad-form--disabled');
+  //     // Удаление атрибута disabled
+  //     window.form.addDisabledFieldset();
+  //   }
+  // };
+
+  // Функция отправки формы на сервер
   var onFormSubmit = function (evt) {
     evt.preventDefault();
-
-    var successHandler = function (successMessage) {
-      var similarSuccessTemplate = document.querySelector('#success')
-      .content
-      .querySelector('.success');
-
-      var nodeSuccess = similarSuccessTemplate.cloneNode(true);
-      nodeSuccess.querySelector('.success__message').textContent = successMessage;
-
-      document.body.insertAdjacentElement('afterbegin', nodeSuccess);
-    };
-
-    var showSuccess = function (successMessage) {
-      successHandler(successMessage);
-    };
-
-    showSuccess();
 
     window.backend.save(new FormData(window.form.adForm), formSend, showError);
 

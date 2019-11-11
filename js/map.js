@@ -18,15 +18,14 @@
   var MIN_COORD_Y = 130;
   var MAX_COORD_Y = 630;
 
-  var isPageActive = false;
-
   window.map = {
+    isPageActive: false,
     // Карта объявлений
     mapAds: document.querySelector('.map'),
 
     // Функция переноса данных координат в поле "адрес"
     getAddress: function () {
-      if (!isPageActive) {
+      if (!window.map.isPageActive) {
         var coords = {
           x: mainPin.offsetLeft + MainPinData.HALF_WIDTH_PIN,
           y: mainPin.offsetTop + MainPinData.HEIGHT_PIN
@@ -95,13 +94,13 @@
       upEvt.preventDefault();
 
       // Показ меток на карте
-      if (!isPageActive) {
+      if (!window.map.isPageActive) {
         // Открытие попапа
         window.form.getPopupOpen();
         // Отрисовка меток
         window.pin.renderPinList();
 
-        isPageActive = true;
+        window.map.isPageActive = true;
       }
 
       document.removeEventListener('mousemove', onMouseMove);
@@ -112,13 +111,13 @@
     mainPin.addEventListener('keydown', function (evtKey) {
       if (evtKey.keyCode === ENTER_KEYCODE) {
         // Показ меток на карте
-        if (!isPageActive) {
+        if (!window.map.isPageActive) {
           // Открытие попапа
           window.form.getPopupOpen();
           // Отрисовка меток
           window.pin.renderPinList();
 
-          isPageActive = true;
+          window.map.isPageActive = true;
         }
       }
     });

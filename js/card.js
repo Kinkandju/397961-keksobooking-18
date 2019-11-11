@@ -2,8 +2,8 @@
 
 (function () {
 
-  var ESC_KEYCODE = 27;
-  window.card.ESC_KEYCODE = ESC_KEYCODE;
+  // var ESC_KEYCODE = 27;
+  // window.card.ESC_KEYCODE = ESC_KEYCODE;
   var AccomodationTypes = {
     PALACE: 'Дворец',
     FLAT: 'Квартира',
@@ -18,22 +18,6 @@
 
   // Переменная, куда запишется отрисовка модального окна объявления
   var card;
-
-  // Функция закрытия модального окна при нажатии Esc
-  var onKeyEsc = function (evt) {
-    if (card && evt.keyCode === ESC_KEYCODE) {
-      window.card.closeCard();
-    }
-  };
-
-  // Закрытие модального окна объявления
-  var closeCard = function () {
-    if (card) {
-      card.querySelector('.popup__close').removeEventListener('click', window.card.closeCard);
-      document.removeEventListener('keydown', window.card.onKeyEsc);
-      card.remove();
-    }
-  };
 
   // Функция генерации списка удобств
   var getFeaturesList = function (featureObject) {
@@ -67,6 +51,8 @@
   };
 
   window.card = {
+    ESC_KEYCODE: 27,
+
     // Отрисовка модального окна объявления
     renderCards: function (cardData) {
       // Удаление предыдущего модального окна объявления
@@ -98,6 +84,22 @@
 
       // Закрытие модального окна при нажатии Esc
       cardElement.querySelector('.popup__close').addEventListener('keydown', onKeyEsc);
+    }
+  };
+
+  // Функция закрытия модального окна при нажатии Esc
+  var onKeyEsc = function (evt) {
+    if (card && evt.keyCode === window.card.ESC_KEYCODE) {
+      closeCard();
+    }
+  };
+
+  // Закрытие модального окна объявления
+  var closeCard = function () {
+    if (card) {
+      card.querySelector('.popup__close').removeEventListener('click', closeCard);
+      document.removeEventListener('keydown', onKeyEsc);
+      card.remove();
     }
   };
 
