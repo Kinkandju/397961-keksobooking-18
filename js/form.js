@@ -12,8 +12,6 @@
 
   var MAX_PRICE = 1000000;
 
-  var ESC_KEYCODE = 27;
-
   // ----Реализация сценария переключения режимов страницы----
 
   window.form = {
@@ -45,6 +43,7 @@
   };
 
   var formFieldset = window.form.adForm.querySelectorAll('fieldset');
+  var featuresFieldset = window.form.adForm.querySelectorAll('.feature__checkbox')
   var titleInput = window.form.adForm.querySelector('#title');
   var priceInput = window.form.adForm.querySelector('#price');
   var typeInput = window.form.adForm.querySelector('#type');
@@ -52,6 +51,7 @@
   var timeOutInput = window.form.adForm.querySelector('#timeout');
   var roomNumberInput = window.form.adForm.querySelector('#room_number');
   var capacityInput = window.form.adForm.querySelector('#capacity');
+  var descriptionInput = window.form.adForm.querySelector('#description');
 
   window.form.addDisabledFieldset();
 
@@ -189,7 +189,7 @@
 
       // Событие нажатия клавиши Esc на произвольную область экрана
       nodeSuccess.addEventListener('keydown', function (evtKey) {
-        if (evtKey.keyCode === ESC_KEYCODE) {
+        if (evtKey.keyCode === window.card.ESC_KEYCODE) {
           closePopup();
           similarSuccessTemplate.style = '';
         }
@@ -197,7 +197,7 @@
 
       // Функция удаления обработчика закрытия попапа по нажатию на Esc
       var onPopupEscPress = function (evt) {
-        if (evt.keyCode === ESC_KEYCODE) {
+        if (evt.keyCode === window.card.ESC_KEYCODE) {
           closePopup();
         }
       };
@@ -209,8 +209,8 @@
       };
     };
 
-    var showSuccess = function (successMessage) {
-      successHandler(successMessage);
+    var showSuccess = function (nodeSuccess) {
+      successHandler(nodeSuccess);
     };
 
     showSuccess();
@@ -243,7 +243,7 @@
 
     // Событие нажатия клавиши Esc на произвольную область экрана
     nodeError.addEventListener('keydown', function (evtKey) {
-      if (evtKey.keyCode === ESC_KEYCODE) {
+      if (evtKey.keyCode === window.card.ESC_KEYCODE) {
         closePopup();
         similarErrorTemplate.style = '';
       }
@@ -251,7 +251,7 @@
 
     // Функция удаления обработчика закрытия попапа по нажатию на Esc
     var onPopupEscPress = function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.keyCode === window.card.ESC_KEYCODE) {
         closePopup();
       }
     };
@@ -269,27 +269,52 @@
   };
 
   // Активное и неактивное состояния страницы
-  // var pageStatus = function () {
-  //   if (!window.map.isPageActive) {
-  //     // Открытие попапа
-  //     window.form.getPopupOpen();
-  //     // Отрисовка меток
-  //     window.pin.renderPinList();
-  //
-  //     window.map.isPageActive = true;
-  //   } else {
-  //   // Активация карты/снятие затемнения c карты
-  //     window.map.mapAds.classList.add('map--faded');
-  //     // Снятие затемнения c формы
-  //     window.form.adForm.classList.add('ad-form--disabled');
-  //     // Удаление атрибута disabled
-  //     window.form.addDisabledFieldset();
-  //   }
-  // };
+  var pageStatus = function () {
+    if (!window.map.isPageActive) {
+      // Открытие попапа
+      window.form.getPopupOpen();
+      // Отрисовка меток
+      window.pin.renderPinList();
+
+      window.map.isPageActive = true;
+    } else {
+    // Затемнение карты
+      window.map.mapAds.classList.add('map--faded');
+      // Затемнение формы
+      window.form.adForm.classList.add('ad-form--disabled');
+      // Добавление атрибута disabled
+      window.form.addDisabledFieldset();
+      // Скрытие меток
+      window.pin.hidePins();
+      // Координаты главной метки
+      window.map.getAddress();
+      // Скрытие объявлений
+      window.card.closeCard();
+
+      var syncValues = function (element, value) {
+        element.value = value;
+      };
+
+      syncValues(titleInput, '');
+      syncValues(typeInput, 'flat');
+      syncValues(priceInput, '1000');
+      syncValues(timeInInput, '12:00');
+      syncValues(timeOutInput, '12:00');
+      syncValues(descriptionInput, '');
+      syncValues(roomNumberInput, '1');
+      syncValues(capacityInput, '1');
+
+      featuresFieldset.forEach(function (element) {
+        element.checked = false;
+      });
+    }
+  };
 
   // Функция отправки формы на сервер
   var onFormSubmit = function (evt) {
     evt.preventDefault();
+
+    pageStatus();
 
     window.backend.save(new FormData(window.form.adForm), formSend, showError);
 

@@ -56,7 +56,7 @@
     // Отрисовка модального окна объявления
     renderCards: function (cardData) {
       // Удаление предыдущего модального окна объявления
-      closeCard();
+      window.card.closeCard();
 
       var cardElement = similarCardTemplate.cloneNode(true);
 
@@ -80,27 +80,36 @@
       card = document.querySelector('.map__card');
 
       // Закрытие модального окна при клике
-      cardElement.querySelector('.popup__close').addEventListener('click', closeCard);
+      cardElement.querySelector('.popup__close').addEventListener('click', window.card.closeCard);
 
       // Закрытие модального окна при нажатии Esc
       cardElement.querySelector('.popup__close').addEventListener('keydown', onKeyEsc);
+    },
+
+    // Закрытие модального окна объявления
+    closeCard: function () {
+      if (card) {
+        card.querySelector('.popup__close').removeEventListener('click', window.card.closeCard);
+        document.removeEventListener('keydown', onKeyEsc);
+        card.remove();
+      }
     }
   };
 
   // Функция закрытия модального окна при нажатии Esc
   var onKeyEsc = function (evt) {
     if (card && evt.keyCode === window.card.ESC_KEYCODE) {
-      closeCard();
+      window.card.closeCard();
     }
   };
 
   // Закрытие модального окна объявления
-  var closeCard = function () {
-    if (card) {
-      card.querySelector('.popup__close').removeEventListener('click', closeCard);
-      document.removeEventListener('keydown', onKeyEsc);
-      card.remove();
-    }
-  };
+  // var closeCard = function () {
+  //   if (card) {
+  //     card.querySelector('.popup__close').removeEventListener('click', closeCard);
+  //     document.removeEventListener('keydown', onKeyEsc);
+  //     card.remove();
+  //   }
+  // };
 
 })();

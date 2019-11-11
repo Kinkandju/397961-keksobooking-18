@@ -11,6 +11,8 @@
   var similarPinTemplate = document.querySelector('#pin')
       .content;
 
+  // var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
   // Отрисовка метки
   var renderPin = function (advertisment) {
     var advertismentElement = similarPinTemplate.cloneNode(true);
@@ -21,7 +23,6 @@
     advertismentElement.querySelector('img').alt = advertisment.offer.title;
 
     return advertismentElement;
-
   };
 
   // Функция открытия карточки при нажатии по метке на карте
@@ -52,6 +53,14 @@
         createPinsListeners(advertisments);
       };
       window.backend.load(onLoad);
+    },
+
+    // Скрытие меток
+    hidePins: function () {
+      var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+      mapPins.forEach(function (pin) {
+        pin.style.display = 'none';
+      });
     }
   };
 
