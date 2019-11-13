@@ -52,6 +52,7 @@
       x: evt.clientX,
       y: evt.clientY
     };
+    window.map.coordinates = startCoords;
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
