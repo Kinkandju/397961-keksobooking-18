@@ -56,10 +56,10 @@
     },
 
     // Скрытие меток
-    hidePins: function () {
+    removePins: function () {
       var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
       mapPins.forEach(function (pin) {
-        pin.style.display = 'none';
+        pin.remove();
       });
     }
   };

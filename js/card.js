@@ -103,13 +103,4 @@
     }
   };
 
-  // Закрытие модального окна объявления
-  // var closeCard = function () {
-  //   if (card) {
-  //     card.querySelector('.popup__close').removeEventListener('click', closeCard);
-  //     document.removeEventListener('keydown', onKeyEsc);
-  //     card.remove();
-  //   }
-  // };
-
 })();

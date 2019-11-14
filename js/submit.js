@@ -7,13 +7,12 @@
   var formSend = function () {
     window.map.mapAds.classList.add('hidden');
 
-    var successHandler = function (successMessage) {
+    var successHandler = function () {
       var similarSuccessTemplate = document.querySelector('#success')
       .content
       .querySelector('.success');
 
       var nodeSuccess = similarSuccessTemplate.cloneNode(true);
-      nodeSuccess.querySelector('.success__message').textContent = successMessage;
 
       document.body.insertAdjacentElement('afterbegin', nodeSuccess);
 
@@ -119,7 +118,7 @@
       // Добавление атрибута disabled
       window.form.addDisabledFieldset();
       // Скрытие меток
-      window.pin.hidePins();
+      window.pin.removePins();
       // Скрытие объявлений
       window.card.closeCard();
       // Координаты главной метки
@@ -142,6 +141,8 @@
       featuresFieldset.forEach(function (element) {
         element.checked = false;
       });
+
+      window.map.isPageActive = false;
     }
   };
 
