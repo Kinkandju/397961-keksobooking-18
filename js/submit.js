@@ -117,12 +117,12 @@
       window.form.adForm.classList.add('ad-form--disabled');
       // Добавление атрибута disabled
       window.form.addDisabledFieldset();
-      // Скрытие меток
+      // Удаление меток
       window.pin.removePins();
       // Скрытие объявлений
       window.card.closeCard();
       // Координаты главной метки
-      window.map.getAddress();
+      window.map.getMainPinAddress();
 
       // Сброс данных до исходного состояния
       var syncValues = function (element, value) {

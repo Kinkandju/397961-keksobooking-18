@@ -2,16 +2,18 @@
 
 (function () {
 
+  // Размеры меток
   var PinData = {
     WIDTH_PIN: 50,
     HEIGHT_PIN: 70
   };
 
+  // Максимальное количество меток
+  var MAX_PINS = 5;
+
   // Шаблон метки объявления
   var similarPinTemplate = document.querySelector('#pin')
       .content;
-
-  // var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
   // Отрисовка метки
   var renderPin = function (advertisment) {
@@ -45,8 +47,10 @@
       var fragment = document.createDocumentFragment();
 
       var onLoad = function (advertisments) {
-        advertisments.forEach(function (pin) {
-          fragment.appendChild(renderPin(pin));
+        advertisments.forEach(function (pin, i) {
+          if (i < MAX_PINS) {
+            fragment.appendChild(renderPin(pin));
+          }
         });
         pinList.appendChild(fragment);
 
@@ -55,7 +59,7 @@
       window.backend.load(onLoad);
     },
 
-    // Скрытие меток
+    // Удаление меток
     removePins: function () {
       var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
       mapPins.forEach(function (pin) {
