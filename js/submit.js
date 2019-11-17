@@ -123,6 +123,8 @@
       window.card.closeCard();
       // Координаты главной метки
       window.map.getMainPinAddress();
+      // Сброс фильтра
+      window.filters.clearFilters();
 
       // Сброс данных до исходного состояния
       var syncValues = function (element, value) {

@@ -2,6 +2,8 @@
 
 (function () {
 
+  var filters = document.querySelector('.map__filters');
+
   // Размеры меток
   var PinData = {
     WIDTH_PIN: 50,
@@ -10,6 +12,8 @@
 
   // Максимальное количество меток
   var MAX_PINS = 5;
+
+  var pins = [];
 
   // Шаблон метки объявления
   var similarPinTemplate = document.querySelector('#pin')
@@ -67,5 +71,28 @@
       });
     }
   };
+
+  // Отфильтровка меток
+  var getFilteredPins = function () {
+    var filteredPins = pins.filter(function (pin) {
+      return window.filters.filterPins(pin);
+    });
+    return filteredPins;
+  };
+
+  // Обновление меток
+  var updatePins = function () {
+    window.pin.removePins();
+    window.pin.renderPinList(getFilteredPins());
+  };
+
+  // Событие изменений фильтрации объявлений
+  filters.addEventListener('change', function (evt) {
+    if (evt.target.name !== 'features') {
+      window.filters.HousingMap[evt.target.name](evt.target.value);
+    }
+    window.debounce(updatePins);
+  });
+
 
 })();
