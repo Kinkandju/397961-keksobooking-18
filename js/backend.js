@@ -9,7 +9,7 @@
 
   var CODE_SUCCESS = 200;
 
-  window.load = function (onLoad, onError) {
+  var xhrSetup = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -17,8 +17,7 @@
       if (xhr.status === CODE_SUCCESS) {
         onLoad(xhr.response);
       } else {
-        // onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-        onError('Ошибка загрузки объявления');
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
@@ -29,23 +28,20 @@
     return xhr;
   };
 
-  var loadData = function (onLoad, onError) {
-    var xhr = window.load(onLoad, onError);
-
-    xhr.open('GET', Url.DOWNLOAD);
-    xhr.send();
-  };
-
-  var saveData = function (data, onLoad, onError) {
-    var xhr = window.load(onLoad, onError);
-
-    xhr.open('POST', Url.UPLOAD);
-    xhr.send(data);
-  };
-
   window.backend = {
-    load: loadData,
-    save: saveData
+    save: function (data, onLoad, onError) {
+      var xhr = xhrSetup(onLoad, onError);
+
+      xhr.open('POST', Url.UPLOAD);
+      xhr.send(data);
+    },
+
+    load: function (onLoad, onError) {
+      var xhr = xhrSetup(onLoad, onError);
+
+      xhr.open('GET', Url.DOWNLOAD);
+      xhr.send();
+    }
   };
 
 })();

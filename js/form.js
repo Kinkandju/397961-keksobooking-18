@@ -10,25 +10,33 @@
     'palace': 10000
   };
 
-  // var adForm = document.querySelector('.ad-form');
-  // window.adForm = adForm;
+  var MAX_PRICE = 1000000;
 
   // ----Реализация сценария переключения режимов страницы----
 
   window.form = {
     adForm: document.querySelector('.ad-form'),
+    formFieldset: document.querySelectorAll('fieldset'),
+    titleInput: document.querySelector('#title'),
+    priceInput: document.querySelector('#price'),
+    typeInput: document.querySelector('#type'),
+    timeInInput: document.querySelector('#timein'),
+    timeOutInput: document.querySelector('#timeout'),
+    roomNumberInput: document.querySelector('#room_number'),
+    capacityInput: document.querySelector('#capacity'),
+    descriptionInput: document.querySelector('#description'),
 
     // Добавление атрибута disabled для полей формы
     addDisabledFieldset: function () {
-      for (var i = 0; i < formFieldset.length; i++) {
-        formFieldset[i].disabled = true;
+      for (var i = 0; i < window.form.formFieldset.length; i++) {
+        window.form.formFieldset[i].disabled = true;
       }
     },
 
     // Удаление атрибута disabled для полей формы
     removeDisabledFieldset: function () {
-      for (var j = 0; j < formFieldset.length; j++) {
-        formFieldset[j].removeAttribute('disabled');
+      for (var j = 0; j < window.form.formFieldset.length; j++) {
+        window.form.formFieldset[j].removeAttribute('disabled');
       }
     },
 
@@ -43,15 +51,6 @@
     }
   };
 
-  var formFieldset = window.form.adForm.querySelectorAll('fieldset');
-  var titleInput = window.form.adForm.querySelector('#title');
-  var priceInput = window.form.adForm.querySelector('#price');
-  var typeInput = window.form.adForm.querySelector('#type');
-  var timeInInput = window.form.adForm.querySelector('#timein');
-  var timeOutInput = window.form.adForm.querySelector('#timeout');
-  var roomNumberInput = window.form.adForm.querySelector('#room_number');
-  var capacityInput = window.form.adForm.querySelector('#capacity');
-
   window.form.addDisabledFieldset();
 
   // В поле "адрес" записываются координаты главной метки (неактивное состояние)
@@ -60,7 +59,7 @@
   // ----Взаимодействие с формой----
 
   // Все элементы option, которые находятся в #capacity
-  var inputCapacityOptions = capacityInput.querySelectorAll('option');
+  var inputCapacityOptions = window.form.capacityInput.querySelectorAll('option');
 
   // Удаление всех элементов (option) из кол-ва мест для гостей
   var inputRoomValidateNumber = function () {
@@ -70,7 +69,7 @@
 
     // Конструкция switch заменяет собой сразу несколько if
     // и представляет собой более наглядный способ сравнить выражение сразу с несколькими вариантами
-    switch (roomNumberInput.selectedIndex) {
+    switch (window.form.roomNumberInput.selectedIndex) {
       case 0:
         insertInputCapacityOptions([2]);
         break;
@@ -90,83 +89,79 @@
   // (после последовательного сравнения всех вариантов roomNumber.selectedIndex со всеми вариантами из case)
   var insertInputCapacityOptions = function (elements) {
     elements.forEach(function (element) {
-      capacityInput.appendChild(inputCapacityOptions[element]);
+      window.form.capacityInput.appendChild(inputCapacityOptions[element]);
     });
   };
 
   inputRoomValidateNumber();
 
   // Событие при выборе/изменении кол-ва комнат
-  roomNumberInput.addEventListener('change', inputRoomValidateNumber);
+  window.form.roomNumberInput.addEventListener('change', inputRoomValidateNumber);
 
   // ----Валидация полей формы----
 
   // Валидация формы ввода заголовка объявления
-  titleInput.addEventListener('invalid', function () {
-    if (titleInput.validity.tooShort) {
-      titleInput.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
-    } else if (titleInput.validity.tooLong) {
-      titleInput.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
-    } else if (titleInput.validity.valueMissing) {
-      titleInput.setCustomValidity('Обязательное поле');
+  window.form.titleInput.addEventListener('input', function () {
+    window.form.titleInput.checkValidity();
+  });
+
+  window.form.titleInput.addEventListener('invalid', function () {
+    if (window.form.titleInput.validity.tooShort) {
+      window.form.titleInput.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
+      window.form.titleInput.style.border = '2px solid tomato';
+    } else if (window.form.titleInput.validity.tooLong) {
+      window.form.titleInput.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
+      window.form.titleInput.style.border = '2px solid tomato';
+    } else if (window.form.titleInput.validity.valueMissing) {
+      window.form.titleInput.setCustomValidity('Обязательное поле');
+      window.form.titleInput.style.border = '2px solid tomato';
     } else {
-      titleInput.setCustomValidity('');
+      window.form.titleInput.setCustomValidity('');
+      window.form.titleInput.style.border = 'none';
+    }
+  });
+
+  // Валидация формы ввода цены за ночь
+  window.form.priceInput.addEventListener('change', function () {
+    window.form.priceInput.checkValidity();
+  });
+
+  window.form.priceInput.addEventListener('invalid', function () {
+    if (window.form.priceInput.validity.rangeOverflow) {
+      window.form.priceInput.setCustomValidity('Максимальное значение — ' + MAX_PRICE);
+      window.form.priceInput.style.border = '2px solid tomato';
+    } else if (window.form.priceInput.validity.valueMissing) {
+      window.form.priceInput.setCustomValidity('Это обязательное поле');
+      window.form.priceInput.style.border = '2px solid tomato';
+    } else {
+      window.form.priceInput.setCustomValidity('');
+      window.form.priceInput.style.border = 'none';
     }
   });
 
   // Валидация формы ввода стоимости определенного типа жилья
-  typeInput.addEventListener('change', function (evt) {
+  window.form.typeInput.addEventListener('change', function (evt) {
     var priceValue = MIN_PRICES[evt.target.value];
 
-    priceInput.setAttribute('min', priceValue);
-    priceInput.setAttribute('placeholder', priceValue);
+    window.form.priceInput.setAttribute('min', priceValue);
+    window.form.priceInput.setAttribute('placeholder', priceValue);
   });
 
   // Изменение плейсхолдера для соответствия типа жилья и цены
-  priceInput.placeholder = MIN_PRICES.flat;
+  window.form.priceInput.placeholder = MIN_PRICES.flat;
 
   // Событие при выборе/изменении времени заезда
-  timeInInput.addEventListener('change', function (evt) {
+  window.form.timeInInput.addEventListener('change', function (evt) {
     var value = evt.target.value;
 
-    timeOutInput.value = value;
+    window.form.timeOutInput.value = value;
   });
 
   // Событие при выборе/изменении времени выезда
-  timeOutInput.addEventListener('change', function (evt) {
+  window.form.timeOutInput.addEventListener('change', function (evt) {
     var value = evt.target.value;
 
-    timeInInput.value = value;
+    window.form.timeInInput.value = value;
   });
-
-  // ----Отправка формы----
-
-  var formSend = function () {
-    window.map.mapAds.classList.add('hidden');
-  };
-
-  var errorHandler = function (errorMessage) {
-    var similarErrorTemplate = document.querySelector('#error')
-    .content
-    .querySelector('.error');
-
-    var node = similarErrorTemplate.cloneNode(true);
-
-    node.querySelector('.error__message').textContent = errorMessage;
-
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-
-  var showError = function (errorMessage) {
-    errorHandler(errorMessage);
-  };
-
-  var onFormSubmit = function (evt) {
-    evt.preventDefault();
-
-    window.backend.save(new FormData(window.form.adForm), formSend, showError);
-  };
-
-  window.form.adForm.addEventListener('submit', onFormSubmit);
 
 })();
