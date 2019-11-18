@@ -63,7 +63,6 @@
       x: evt.clientX,
       y: evt.clientY
     };
-    window.map.startCoords = startCoords;
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
