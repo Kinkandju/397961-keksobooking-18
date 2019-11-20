@@ -125,6 +125,10 @@
       window.map.getMainPinAddress();
       // Сброс фильтра
       window.filters.clearFilters();
+      // Сброс аватара
+      window.photos.setDefaultAvatar();
+      // Удаление изображений
+      window.photos.clear();
 
       // Сброс данных до исходного состояния
       var syncValues = function (element, value) {
@@ -147,6 +151,13 @@
       window.map.isPageActive = false;
     }
   };
+
+  var resetForm = window.form.adForm.querySelector('.ad-form__reset');
+
+  // Сброс формы до исходного состояния
+  resetForm.addEventListener('click', function () {
+    pageStatus();
+  });
 
   // Функция отправки формы на сервер
   var onFormSubmit = function (evt) {
